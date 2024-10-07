@@ -21,6 +21,7 @@ df = pd.read_csv('monsters.csv')
 #         self.location = location
 #         self.weapons = weapons
 
+# Source: https://github.com/vannoywv/Dungeons-and-Dragons/blob/main/DDsetup.py
 class Player:
     def __init__(self, name, location, weapons, playclass, race, maxhp, hp):
         # super().__init__(name=name, location=location, weapons=weapons)
@@ -63,6 +64,7 @@ print("\n")
 
 class_list = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard']
 
+# source: https://www.youtube.com/watch?v=iKB78i9tGsM&ab_channel=JadeyCatgirl99
 playclass = random.choice(class_list)
 # print(playclass)
 
@@ -119,7 +121,7 @@ class Monster:
         self.maxhp = maxhp
         self.hp = hp
 
-monster = Monster(str(dfr['Name'].iloc[0]), str(dfr['Size'].iloc[0]), str(dfr['Type'].iloc[0]), int(dfr['STR'].iloc[0]), int(dfr['HP'].iloc[0]), 1)
+monster = Monster(str(dfr['Name'].iloc[0]), str(dfr['Size'].iloc[0]), str(dfr['Type'].iloc[0]), int(dfr['STR'].iloc[0]), int(dfr['HP'].iloc[0]), int(dfr['HP'].iloc[0]))
 # print("This is my monster!")
 # print(monster.name)
 # print(monster.size)
@@ -131,6 +133,7 @@ monster = Monster(str(dfr['Name'].iloc[0]), str(dfr['Size'].iloc[0]), str(dfr['T
 
 def fight(player, monster):
     player_turn = True
+    prepared = None
     print("\033[4m" + f"Your adversary is the {monster.name} of type \"{monster.type}\" and size of {monster.size} with a total of {monster.maxhp} hitpoints." + "\033[0m")
     print("\n")
     while(player.hp > 0 and monster.hp > 0):
@@ -145,7 +148,7 @@ def fight(player, monster):
                 monster.hp = monster_damage
                 weapon = player.weapons[random.randint(0, 1)]
                 print(f"Ouch! {monster.name} was hit with your " + weapon + " and has " + str(monster_damage) + " hitpoints left!")
-                if (d20_roll > 1):
+                if (d20_roll == 20):
                     print("\n")
                     print("Critical hit roll! Roll again for additional damage.")
                     critical_hit = random.randint(0, 20)
@@ -165,12 +168,18 @@ def fight(player, monster):
                 print("\n")
                 player_turn = False
             if (choice.strip().lower() == 'prepare'):
-                prepared = True
-                # print(prepared)
-                print("Getting ready to prepare more damage for next turn...")
-                print("\n")
-                player_turn = False
-                continue
+                    if (prepared == None or prepared == False):
+                        prepared = True
+                        # print(prepared)
+                        print("Getting ready to prepare more damage for next turn...")
+                        print("\n")
+                        player_turn = False
+                        continue
+                    else:
+                        print("\033[1m" + "You are already prepared..." + "\033[0m")
+                        print("\n")
+                        player_turn = True
+                        continue
             if (choice.strip().lower() == 'execute'):
                 try:
                     if (prepared == True):
@@ -181,11 +190,15 @@ def fight(player, monster):
                         new_monster_hp = monster.hp - damage
                         monster.hp = new_monster_hp
                         weapon = player.weapons[random.randint(0, 1)]
-                        print("Your first roll was " + str(roll_1) + ". Your second roll was " + str(roll_2) + ". Your third roll was " + str(roll_3) + ".")
+                        print("\033[1m" + "Your first roll was " + str(roll_1) + ". Your second roll was " + str(roll_2) + ". Your third roll was " + str(roll_3) + ". Your total damage is " + str(damage) + "." + "\033[0m")
                         print(f"{monster.name} was hit three times with your " + weapon + " and now has " + str(new_monster_hp) + " hitpoints!")
                         print("\n")
                         prepared = False
                         player_turn = False
+                    else:
+                        print("\033[1m" + "You did not prepare before executing" + "\033[0m")
+                        print("\n")
+                        player_turn = True
                 except:
                     print("\033[1m" + "You did not prepare before executing" + "\033[0m")
                     print("\n")
@@ -196,6 +209,8 @@ def fight(player, monster):
             hit_or_miss = random.randint(0, 1)
             if (hit_or_miss == 1):
                 modifier = (monster.strength)//5
+                if (modifier == 0):
+                    modifier += 1
                 d20_monster_roll = random.randint(0, 20)
                 monster_hit = d20_monster_roll * modifier
                 player_hit_hp = player.hp - monster_hit
@@ -211,7 +226,7 @@ def fight(player, monster):
         print("\033[1m" + "Game over! You died! Time to play again." + "\033[0m")
         return
     if (monster.hp <= 0):
-        print("The fight's not over! Time to fight a new monster!")
+        print("\033[1m" + "The fight's not over! Time to fight a new monster!" + "\033[0m")
         # print("This is my monster!")
         # print(new_monster.name)
         # print(new_monster.size)
@@ -221,19 +236,21 @@ def fight(player, monster):
         # print(new_monster.hp)
         # print("Properties read!")
         global first_monster
-        print(first_monster)
-        print(new_dfr)
+        global new_dfr
+        # print(first_monster)
+        # print(new_dfr)
         if (first_monster == True):
             first_monster = False
             dfr.to_csv("monsters_defeated.csv")
         else:
             new_dfr.to_csv("monsters_defeated.csv", mode='a', header=False)
-        new_monster = Monster(str(new_dfr['Name'].iloc[0]), str(new_dfr['Size'].iloc[0]), str(new_dfr['Type'].iloc[0]), int(new_dfr['STR'].iloc[0]), int(new_dfr['HP'].iloc[0]), 1)
-        new_dfr = df.sample()
+            new_dfr = df.sample()
+        
+        # print(first_monster)
+        new_monster = Monster(str(new_dfr['Name'].iloc[0]), str(new_dfr['Size'].iloc[0]), str(new_dfr['Type'].iloc[0]), int(new_dfr['STR'].iloc[0]), int(new_dfr['HP'].iloc[0]), int(new_dfr['HP'].iloc[0]))
+        # print(new_monster.name, new_monster.type, new_monster.size)
         fight(player, new_monster)
         
-
-
 
 
 fight(new_player, monster)

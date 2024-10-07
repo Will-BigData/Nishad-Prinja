@@ -1,3 +1,5 @@
 ,Name,Size,Type,Align.,AC,HP,Speeds,STR,DEX,CON,INT,WIS,CHA,Sav. Throws,Skills,WRI,Senses,Languages,CR,Additional,Font,Additional Info,Author
-327,Githyanki Warrior,Medium,Humanoid,LE,17,49,30,15,14,12,13,13,10,"CON, INT, WIS",,,Normal,Own,3.00,Innate Spellcasting,Monster Manual,,Wizards of the Coast
-307,Giant Subterranean Lizard,Huge,Beast,U,14,66,"30, swim 50",21,9,17,2,10,7,,Stealth,,Normal,,4.00,,Tales from the Yawning Portal,,Wizards of the Coast
+635,Owlbear,Large,Monstrosity,U,13,59,40,20,12,17,3,12,7,,Perception,,Darkvision 60,,3.00,"Keen Sight, Keen Smell",Monster Manual,,Wizards of the Coast
+234,Drow Mage,Medium,Humanoid,NE,12,45,30,9,14,10,17,13,12,,"Arcana, Deception, Perception, Stealth",,Darkvision 120,"Elvish, Undercommon",7.00,"Fey Ancestry, Innate Spellcasting, Normal Spellcasting, Sunlight Sensitivity",Monster Manual,,Wizards of the Coast
+549,Myconid Sovereign,Large,Plant,LN,13,60,30,12,10,14,13,15,10,,,,Darkvision 120,,2.00,"Distress Spores, Sun Sickness",Monster Manual,,Wizards of the Coast
+800,"Zuggtmoy, Bridesmaid",Medium,Plant,CE,13,22,20,14,11,11,14,8,18,,,,Darkvision 60,Abyssal,0.13,Fungus Stride,Out of the Abyss,,Wizards of the Coast
